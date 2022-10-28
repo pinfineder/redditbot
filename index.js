@@ -24,7 +24,7 @@ client.on('messageCreate', async (message)=>{
 
             break;
         case "!help":
-            message.channel.send("literally just type !help no other commands :wink: ")
+            message.channel.send("literally just type !meme no other commands :wink: ")
     }
 });
 
