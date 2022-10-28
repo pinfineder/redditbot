@@ -23,6 +23,8 @@ client.on('messageCreate', async (message)=>{
             message.channel.send(meme.data.url)
 
             break;
+        case "!help":
+            message.channel.send("literally just type !help no other commands :wink: ")
     }
 });
 
