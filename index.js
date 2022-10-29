@@ -1,6 +1,6 @@
 // Require the necessary discord.js classes
 const { Client, Events, GatewayIntentBits, Message } = require('discord.js');
-const { token, prefix, subRedditList} = require('./config.json');
+const { token, prefix, subRedditList, otherSubRedditList} = require('./config.json');
 const { EmbedBuilder } = require('discord.js');
 
 const request = require('request');
@@ -33,8 +33,37 @@ client.on('messageCreate', async (message)=>{
             break;
         case "!help":
             message.channel.send("literally just type !meme no other commands :wink: ")
+        case "!post":
+            const post = await getPost();
+
+            const EmbedPost = new EmbedBuilder()
+                .setTitle(post.data.title)
+                .setDescription("subreddit: " + post.data.subreddit_name_prefixed)
+                .setImage(post.data.url)
+
+            message.channel.send({ embeds: [EmbedPost] });
     }
 });
+
+const getPost = () => {
+    return new Promise((resolve, reject) => {
+        const url = otherSubRedditList[Math.floor(Math.random() * otherSubRedditList.length)];
+
+        request({
+            uri: url,
+            method: 'GET'
+        }, (err, res) => {
+            console.log(`Fetching from ${url}...`)
+            if(err) throw err;
+            if(res.statusCode != 200) return console.error('418 - something went terribly wrong');
+    
+            const json = JSON.parse(res.body);
+            const children = json.data.children;
+    
+            return resolve(children[Math.floor(Math.random() * children.length)]);
+        });
+    });
+}
 
 const getMeme = () => {
     return new Promise((resolve, reject) => {
