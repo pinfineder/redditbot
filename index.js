@@ -33,6 +33,7 @@ client.on('messageCreate', async (message)=>{
             break;
         case "!help":
             message.channel.send("literally just type !meme no other commands :wink: ")
+            break;
         case "!post":
             const post = await getPost();
 
@@ -42,6 +43,7 @@ client.on('messageCreate', async (message)=>{
                 .setImage(post.data.url)
 
             message.channel.send({ embeds: [EmbedPost] });
+            break;
     }
 });
 
