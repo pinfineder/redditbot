@@ -18,9 +18,9 @@ client.on('messageCreate', async (message)=>{
     if(!message.content.startsWith(prefix)) {
         return
     }
-    switch(message.content){
+    switch(true){
         
-        case "#meme":
+        case message.content.includes("meme"):
             const meme = await getMeme();
             
 
@@ -32,12 +32,12 @@ client.on('messageCreate', async (message)=>{
             message.channel.send({ embeds: [exampleEmbed] });
 
             break;
-        case "#help":
+        case message.content.includes("help"):
             message.channel.send("literally just type !meme no other commands :wink: ")
             break;
 
            
-        case "#post":
+        case message.content.includes("post"):
             const post = await getPost();
 
             const EmbedPost = new EmbedBuilder()
