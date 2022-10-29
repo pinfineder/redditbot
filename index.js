@@ -19,7 +19,8 @@ client.on('messageCreate', async (message)=>{
         return
     }
     switch(message.content){
-        case "!meme":
+        
+        case "#meme":
             const meme = await getMeme();
             
 
@@ -31,18 +32,22 @@ client.on('messageCreate', async (message)=>{
             message.channel.send({ embeds: [exampleEmbed] });
 
             break;
-        case "!help":
+        case "#help":
             message.channel.send("literally just type !meme no other commands :wink: ")
             break;
-        case "!post":
+
+           
+        case "#post":
             const post = await getPost();
 
             const EmbedPost = new EmbedBuilder()
                 .setTitle(post.data.title)
                 .setDescription("subreddit: " + post.data.subreddit_name_prefixed)
                 .setImage(post.data.url)
-
-            message.channel.send({ embeds: [EmbedPost] });
+            if(message.channel.nsfw){
+                message.channel.send({ embeds: [EmbedPost] });
+            }
+            
             break;
     }
 });
