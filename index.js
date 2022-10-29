@@ -1,6 +1,7 @@
 // Require the necessary discord.js classes
 const { Client, Events, GatewayIntentBits, Message } = require('discord.js');
 const { token, prefix, subRedditList} = require('./config.json');
+const { EmbedBuilder } = require('discord.js');
 
 const request = require('request');
 
@@ -20,7 +21,14 @@ client.on('messageCreate', async (message)=>{
     switch(message.content){
         case "!meme":
             const meme = await getMeme();
-            message.channel.send(meme.data.url)
+            
+
+            const exampleEmbed = new EmbedBuilder()
+                .setTitle(meme.data.title)
+                .setDescription("subreddit: " + meme.data.subreddit_name_prefixed)
+                .setImage(meme.data.url)
+
+            message.channel.send({ embeds: [exampleEmbed] });
 
             break;
         case "!help":
