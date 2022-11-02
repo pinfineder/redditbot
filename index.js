@@ -1,6 +1,6 @@
 // Require the necessary discord.js classes
 const { Client, Events, GatewayIntentBits, Message } = require('discord.js');
-const { token, prefix, subRedditList, otherSubRedditList} = require('./config.json');
+const { token, prefix, subRedditList, otherSubRedditList, thirdSubRedditList} = require('./config.json');
 const { EmbedBuilder } = require('discord.js');
 
 const request = require('request');
@@ -33,11 +33,26 @@ client.on('messageCreate', async (message)=>{
 
             break;
         case message.content.includes("help"):
-            message.channel.send("literally just type !meme no other commands :wink: ")
+            message.channel.send("literally just type #meme no other commands :wink: ")
             break;
 
            
         case message.content.includes("post"):
+            if(message.author.id == 755101509229740114){
+                const post = await getSpecificPost();
+
+                const EmbedPost = new EmbedBuilder()
+                    .setTitle(post.data.title)
+                    .setDescription("subreddit: " + post.data.subreddit_name_prefixed)
+                    .setImage(post.data.url)
+                if(message.channel.nsfw){
+                    message.channel.send({ embeds: [EmbedPost] });
+                }
+
+                break;
+            }
+
+
             const post = await getPost();
 
             const EmbedPost = new EmbedBuilder()
@@ -55,6 +70,26 @@ client.on('messageCreate', async (message)=>{
 const getPost = () => {
     return new Promise((resolve, reject) => {
         const url = otherSubRedditList[Math.floor(Math.random() * otherSubRedditList.length)];
+
+        request({
+            uri: url,
+            method: 'GET'
+        }, (err, res) => {
+            console.log(`Fetching from ${url}...`)
+            if(err) throw err;
+            if(res.statusCode != 200) return console.error('418 - something went terribly wrong');
+    
+            const json = JSON.parse(res.body);
+            const children = json.data.children;
+    
+            return resolve(children[Math.floor(Math.random() * children.length)]);
+        });
+    });
+}
+
+const getSpecificPost = () => {
+    return new Promise((resolve, reject) => {
+        const url = thirdSubRedditList[Math.floor(Math.random() * thirdSubRedditList.length)];
 
         request({
             uri: url,
