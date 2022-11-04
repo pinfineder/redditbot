@@ -1,6 +1,6 @@
 // Require the necessary discord.js classes
 const { Client, Events, GatewayIntentBits, Message } = require('discord.js');
-const { token, prefix, subRedditList, otherSubRedditList, thirdSubRedditList } = require('./config.json');
+const { token, prefix, subRedditList, otherSubRedditList, thirdSubRedditList, uid1 } = require('./config.json');
 const { EmbedBuilder } = require('discord.js');
 
 const request = require('request');
@@ -14,7 +14,7 @@ client.once(Events.ClientReady, c => {
     console.log(`Ready! Logged in as ${c.user.tag}`);
 });
 
-client.on('messageCreate', async (message) => {
+client.on('messageCreate', async(message) => {
     if (!message.content.startsWith(prefix)) return
 
     switch (true) {
@@ -37,7 +37,7 @@ client.on('messageCreate', async (message) => {
                 specific: false // possibly use this for custom message
             }
 
-            if (message.author.id == 755101509229740114) {
+            if (message.author.id == uid1) {
                 params.subredditList = thirdSubRedditList;
                 params.specific = true;
             }
